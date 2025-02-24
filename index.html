@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nitin Shukla</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8Y2lyY2xlIGN4PSIxNiIgY3k9IjE2IiByPSIxNCIgZmlsbD0idXJsKCNncmFkLWxpZ2h0KSIgc3Ryb2tlPSJyZ2JhKDI1NSwgMjU1LCAyNTUsIDAuNSkiIHN0cm9rZS13aWR0aD0iMiIvPgogIDx0ZXh0IHg9IjkiIHk9IjIxIiBmb250LWZhbWlseT0iSGVsdmV0aWNhLCBBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNiIgZm9udC13ZWlnaHQ9IjkwMCIgZmlsbD0iI2ZmZiI+TlM8L3RleHQ+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImdyYWQtbGlnaHQiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjMUUzQThBIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzIyRDNFRSIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICAgIDxzdHlsZT4KICAgICAgQG1lZGlhIChwcmVmZXJzLWNvbG9yLXNjaGVtZTogZGFyaykgewogICAgICAgIGNpcmNsZSB7IGZpbGw6IHVybCgjZ3JhZC1kYXJrKTsgfQogICAgICB9CiAgICAgIGxpbmVhckdyYWRpZW50I2dyYWQtZGFyayB7CiAgICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzIyRDNFRSIvPgogICAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzRBREU4MCIvPgogICAgICB9CiAgICA8L3N0eWxlPgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLWRhcmsiPjwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgo8L3N2Zz4=">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+            background: #fff;
+            color: #000;
+            transition: all 0.3s ease;
+            margin: 0;
+            font-size: 17px;
+            line-height: 1.6;
+            font-weight: 400;
+        }
+        body.dark {
+            background: #1A1A1A;
+            color: #E5E5E5;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -250px;
+            width: 250px;
+            height: 100vh;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            z-index: 100;
+            transition: left 0.3s ease;
+        }
+        .sidebar.active {
+            left: 0;
+        }
+        body.dark .sidebar {
+            background: #252525;
+        }
+
+        /* Logo */
+        .logo {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 40px;
+            text-align: center;
+            perspective: 500px;
+        }
+        .ns-logo {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1E3A8A, #22D3EE);
+            border-radius: 50%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            font-weight: 900;
+            color: #fff;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            box-shadow: 0 8px 25px rgba(30, 58, 138, 0.5);
+            transform: rotateX(10deg);
+        }
+        body.dark .ns-logo {
+            background: linear-gradient(135deg, #22D3EE, #4ADE80);
+            box-shadow: 0 8px 25px rgba(34, 211, 238, 0.6);
+        }
+        .ns-logo::before {
+            content: "NS";
+            position: relative;
+            z-index: 2;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        .ns-logo::after {
+            content: "";
+            position: absolute;
+            width: 80%;
+            height: 80%;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(1);
+            animation: pulse 2s infinite ease-in-out;
+            z-index: 1;
+        }
+        .ns-logo span {
+            position: absolute;
+            width: 2px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            transform-origin: center;
+            z-index: 0;
+        }
+        .ns-logo span:nth-child(1) {
+            top: 10%;
+            left: 50%;
+            transform: rotate(0deg) translateX(-50%);
+            animation: stream 1.5s infinite linear;
+        }
+        .ns-logo span:nth-child(2) {
+            bottom: 10%;
+            left: 50%;
+            transform: rotate(180deg) translateX(-50%);
+            animation: stream 1.5s infinite linear reverse;
+        }
+        .ns-logo span:nth-child(3) {
+            left: 10%;
+            top: 50%;
+            transform: rotate(90deg) translateX(-50%);
+            animation: stream 1.5s infinite linear;
+        }
+        .ns-logo span:nth-child(4) {
+            right: 10%;
+            top: 50%;
+            transform: rotate(-90deg) translateX(-50%);
+            animation: stream 1.5s infinite linear reverse;
+        }
+        .ns-logo:hover {
+            transform: scale(1.1) rotateX(0deg);
+            box-shadow: 0 12px 30px rgba(30, 58, 138, 0.7);
+        }
+        body.dark .ns-logo:hover {
+            box-shadow: 0 12px 30px rgba(34, 211, 238, 0.8);
+        }
+        @keyframes pulse {
+            0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(1.3); opacity: 0; }
+        }
+        @keyframes stream {
+            0% { height: 20px; opacity: 0.8; }
+            50% { height: 30px; opacity: 0.4; }
+            100% { height: 20px; opacity: 0.8; }
+        }
+
+        .nav-links {
+            list-style: none;
+            padding: 0;
+            flex-grow: 1;
+        }
+        .nav-links li {
+            margin: 15px 0;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 400;
+            padding: 10px 0;
+            display: block;
+            transition: color 0.3s;
+            font-size: 17px;
+        }
+        body.dark .nav-links a {
+            color: #E5E5E5;
+        }
+        .nav-links a:hover {
+            color: #22D3EE;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 24px;
+            padding: 10px;
+            color: #000000;
+        }
+        body.dark .theme-toggle {
+            color: #E5E5E5;
+        }
+        .theme-icon.dark {
+            display: none;
+        }
+        body.dark .theme-icon.light {
+            display: none;
+        }
+        body.dark .theme-icon.dark {
+            display: inline;
+        }
+
+        /* Sidebar Toggle */
+        .sidebar-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            font-size: 24px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            z-index: 101;
+            color: #000000;
+        }
+        body.dark .sidebar-toggle {
+            color: #E5E5E5;
+        }
+
+        /* Main Content */
+        .main-content {
+            width: 100%;
+            transition: margin-left 0.3s ease;
+        }
+        .sidebar.active ~ .main-content {
+            margin-left: 250px;
+        }
+
+        /* Section Styling */
+        .section {
+            padding: 60px 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: left;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        h1 {
+            font-size: 48px;
+            font-weight: 700;
+            line-height: 1.08349;
+            margin-bottom: 16px;
+        }
+        h2 {
+            font-size: 32px;
+            font-weight: 700;
+            line-height: 1.125;
+            margin-bottom: 20px;
+            color: #1E3A8A;
+            letter-spacing: 0.5px;
+        }
+        h3 {
+            font-size: 24px;
+            font-weight: 400;
+            line-height: 1.16667;
+        }
+        h4 {
+            font-size: 21px;
+            font-weight: 600;
+            line-height: 1.2381;
+        }
+        h5 {
+            font-size: 17px;
+            font-weight: 600;
+            line-height: 1.23536;
+        }
+        body.dark h2 {
+            color: #22D3EE;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(to bottom, rgba(30, 58, 138, 0.05), rgba(255, 255, 255, 0));
+        }
+        body.dark .hero {
+            background: linear-gradient(to bottom, rgba(34, 211, 238, 0.1), rgba(26, 26, 26, 0));
+        }
+        .hero img {
+            transition: transform 0.3s ease;
+        }
+        .hero img:hover {
+            transform: scale(1.05);
+        }
+
+        .social-icons a {
+            font-size: 24px;
+            margin-right: 20px;
+            color: #1E3A8A;
+            transition: 0.3s ease;
+        }
+        body.dark .social-icons a {
+            color: #E5E5E5;
+        }
+        .social-icons a:hover {
+            color: #22D3EE;
+        }
+
+        /* Skills Section */
+        .skill-item {
+            margin-bottom: 20px;
+        }
+        .skill-item .progress {
+            height: 10px;
+            background: #e0e0e0;
+            transition: transform 0.3s ease;
+        }
+        .skill-item:hover .progress {
+            transform: scale(1.02);
+        }
+        body.dark .skill-item .progress {
+            background: #404040;
+        }
+        .progress-bar {
+            background: #1E3A8A;
+        }
+        body.dark .progress-bar {
+            background: #22D3EE;
+        }
+
+        /* Experience Section (generic) */
+        .timeline-item {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+        body.dark .timeline-item {
+            background: #2A2A2A;
+        }
+        .lead {
+            font-size: 21px;
+            font-weight: 400;
+            line-height: 1.381;
+        }
+
+        /* Contact Section */
+        .contact-form .form-control {
+            border-radius: 0;
+            border: none;
+            border-bottom: 2px solid #1E3A8A;
+            margin-bottom: 20px;
+            background: transparent;
+            font-size: 17px;
+            font-weight: 400;
+        }
+        body.dark .contact-form .form-control {
+            border-bottom: 2px solid #404040;
+            color: #E5E5E5;
+        }
+        .btn-primary {
+            background: #F28C38;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            color: #fff;
+            transition: 0.3s ease;
+            font-size: 17px;
+            font-weight: 600;
+        }
+        body.dark .btn-primary {
+            background: #F28C38;
+        }
+        .btn-primary:hover {
+            background: #D97706;
+        }
+        body.dark .btn-primary:hover {
+            background: #D97706;
+        }
+        .bg-light {
+            background: #f8f8f8 !important;
+        }
+        body.dark .bg-light {
+            background: #2A2A2A !important;
+        }
+
+        /* Footer */
+        footer {
+            padding: 20px;
+            background: #fff;
+            color: #666;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.42861;
+        }
+        body.dark footer {
+            background: #252525;
+            color: #A0A0A0;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .sidebar {
+                left: -100%;
+                width: 100%;
+                height: auto;
+            }
+            .sidebar.active {
+                left: 0;
+            }
+            .sidebar.active ~ .main-content {
+                margin-left: 0;
+            }
+            h1 {
+                font-size: 36px;
+            }
+            h2 {
+                font-size: 24px;
+            }
+            .lead {
+                font-size: 19px;
+            }
+        }
+
+        /* ---------------------------
+           TIMELINE (Short Bio) STYLES
+           --------------------------- */
+        .my-timeline {
+            position: relative;
+            margin: 20px 0;
+        }
+        /* Vertical line */
+        .my-timeline::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 0;
+            width: 2px;
+            height: 100%;
+            background: #ccc;
+        }
+        .my-timeline-item {
+            position: relative;
+            margin-bottom: 30px;
+            padding-left: 60px; /* space for the line + bullet */
+        }
+        /* Dot on the line */
+        .my-timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            width: 20px;
+            height: 20px;
+            background: #1E3A8A;
+            border-radius: 50%;
+            top: 5px;
+        }
+        /* Period/Date range */
+        .my-timeline-period {
+            font-size: 14px;
+            color: #999;
+            margin-bottom: 4px;
+        }
+        .my-timeline-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        .my-timeline-description {
+            font-size: 16px;
+        }
+
+        /* Dark mode timeline colors */
+        body.dark .my-timeline::before {
+            background: #555;
+        }
+        body.dark .my-timeline-item::before {
+            background: #22D3EE;
+        }
+
+        .modern-card {
+        position: relative;
+        background: #fff;
+        border-radius: 12px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        border: none;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    body.dark .modern-card {
+        background: #2A2A2A;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .modern-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    body.dark .modern-card:hover {
+        box-shadow: 0 8px 25px rgba(34, 211, 238, 0.2);
+    }
+
+    .modern-card-header {
+        padding: 20px 25px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        background: linear-gradient(135deg, rgba(30, 58, 138, 0.05), rgba(255, 255, 255, 0));
+    }
+
+    body.dark .modern-card-header {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        background: linear-gradient(135deg, rgba(34, 211, 238, 0.05), rgba(26, 26, 26, 0));
+    }
+
+    .modern-card-title {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 600;
+        color: #1E3A8A;
+        transition: color 0.3s ease;
+    }
+
+    body.dark .modern-card-title {
+        color: #22D3EE;
+    }
+
+    .modern-card-subtitle {
+        margin: 5px 0 0;
+        font-size: 14px;
+        color: #666;
+        font-weight: 400;
+    }
+
+    body.dark .modern-card-subtitle {
+        color: #A0A0A0;
+    }
+
+    .modern-card-body {
+        padding: 25px;
+    }
+
+    .modern-card-body p {
+        margin: 0 0 15px;
+        color: #333;
+        font-size: 16px;
+        line-height: 1.5;
+    }
+
+    body.dark .modern-card-body p {
+        color: #D0D0D0;
+    }
+
+    .modern-card-link {
+        display: inline-flex;
+        align-items: center;
+        color: #F28C38;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        padding: 5px 10px;
+        border-radius: 20px;
+    }
+
+    .modern-card-link:hover {
+        background: rgba(242, 140, 56, 0.1);
+        color: #D97706;
+        text-decoration: none;
+    }
+
+    .modern-card-link i {
+        margin-left: 5px;
+        transition: transform 0.3s ease;
+    }
+
+    .modern-card-link:hover i {
+        transform: translateX(3px);
+    }
+
+    .section-title {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 40px;
+    }
+
+    .section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 50px;
+    height: 3px;
+    background: #1E3A8A;
+    border-radius: 2px;
+    transition: width 0.3s ease;
+}
+
+    body.dark .section-title::after {
+        background: #22D3EE;
+    }
+
+    .section:hover .section-title::after {
+        width: 80px;
+    }
+
+    /* About Section Specific Styles */
+        /* About Section Styles */
+    .about-wrapper {
+        display: flex;
+        align-items: stretch;
+        gap: 40px;
+        margin-top: 40px;
+    }
+
+    @media (max-width: 768px) {
+        .about-wrapper {
+            flex-direction: column;
+            gap: 30px;
+        }
+    }
+
+    .about-text {
+        flex: 2;
+        padding: 20px;
+    }
+
+    .about-text p {
+        color: #333;
+        font-size: 16px;
+        line-height: 1.7;
+        margin-bottom: 25px;
+        position: relative;
+    }
+
+    body.dark .about-text p {
+        color: #D0D0D0;
+    }
+
+    .about-text p::before {
+        content: '';
+        position: absolute;
+        left: -20px;
+        top: 0;
+        height: 100%;
+        width: 3px;
+        background: #1E3A8A;
+        opacity: 0.2;
+        transition: opacity 0.3s ease;
+    }
+
+    body.dark .about-text p::before {
+        background: #22D3EE;
+    }
+
+    .about-text p:hover::before {
+        opacity: 0.5;
+    }
+
+    .about-highlights {
+        flex: 1;
+        background: linear-gradient(135deg, rgba(30, 58, 138, 0.05), rgba(255, 255, 255, 0));
+        border-radius: 12px;
+        padding: 25px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+    }
+
+    body.dark .about-highlights {
+        background: linear-gradient(135deg, rgba(34, 211, 238, 0.05), rgba(26, 26, 26, 0));
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .about-highlights:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    body.dark .about-highlights:hover {
+        box-shadow: 0 8px 25px rgba(34, 211, 238, 0.2);
+    }
+
+    .highlight-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #1E3A8A;
+        margin-bottom: 15px;
+        position: relative;
+    }
+
+    body.dark .highlight-title {
+        color: #22D3EE;
+    }
+
+    .highlight-title::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 30px;
+        height: 2px;
+        background: #F28C38;
+        transition: width 0.3s ease;
+    }
+
+    .highlight-title:hover::after {
+        width: 50px;
+    }
+
+    .highlight-list {
+        list-style: none;
+        padding: 0;
+    }
+
+    .highlight-item {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 15px;
+        color: #333;
+        font-size: 15px;
+    }
+
+    body.dark .highlight-item {
+        color: #D0D0D0;
+    }
+
+    .highlight-item i {
+        color: #F28C38;
+        margin-right: 10px;
+        font-size: 16px;
+        margin-top: 4px;
+    }
+
+    /* Title Animation (reused from previous) */
+    .section-title {
+        position: relative;
+        display: inline-block;
+        margin-bottom: 40px;
+        overflow: hidden;
+    }
+
+    .section-title span {
+        display: inline-block;
+        transform: translateY(100%);
+        animation: slideUp 0.5s ease forwards;
+    }
+
+    .section-title span:nth-child(2) { animation-delay: 0.1s; }
+    .section-title span:nth-child(3) { animation-delay: 0.2s; }
+    .section-title span:nth-child(4) { animation-delay: 0.3s; }
+    .section-title span:nth-child(5) { animation-delay: 0.4s; }
+
+    @keyframes slideUp {
+        to {
+            transform: translateY(0);
+        }
+    }
+
+    .section-title::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+        width: 50px;
+        height: 3px;
+        background: #1E3A8A;
+        border-radius: 2px;
+        transition: width 0.3s ease;
+    }
+
+    body.dark .section-title::after {
+        background: #22D3EE;
+    }
+
+    .section:hover .section-title::after {
+        width: 80px;
+    }
+
+    /* Enhanced Timeline Styles */
+    .timeline-modern {
+        position: relative;
+        margin: 20px 0;
+    }
+
+    .timeline-modern::before {
+        content: '';
+        position: absolute;
+        left: 15px;
+        top: 0;
+        width: 2px;
+        height: 100%;
+        background: linear-gradient(to bottom, #1E3A8A, transparent);
+    }
+
+    body.dark .timeline-modern::before {
+        background: linear-gradient(to bottom, #22D3EE, transparent);
+    }
+
+    .timeline-modern-item {
+        position: relative;
+        margin-bottom: 35px;
+        padding: 15px 20px 15px 60px;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+    }
+
+    body.dark .timeline-modern-item {
+        background: #2A2A2A;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .timeline-modern-item:hover {
+        transform: translateX(5px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    body.dark .timeline-modern-item:hover {
+        box-shadow: 0 4px 15px rgba(34, 211, 238, 0.2);
+    }
+
+    .timeline-modern-item::before {
+        content: '';
+        position: absolute;
+        left: 8px;
+        top: 20px;
+        width: 14px;
+        height: 14px;
+        background: #1E3A8A;
+        border-radius: 50%;
+        border: 3px solid #fff;
+        transition: transform 0.3s ease;
+    }
+
+    body.dark .timeline-modern-item::before {
+        background: #22D3EE;
+        border-color: #2A2A2A;
+    }
+
+    .timeline-modern-item:hover::before {
+        transform: scale(1.2);
+    }
+
+    .timeline-modern-period {
+        font-size: 14px;
+        color: #666;
+        font-weight: 500;
+        margin-bottom: 5px;
+    }
+
+    body.dark .timeline-modern-period {
+        color: #A0A0A0;
+    }
+
+    .timeline-modern-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #1E3A8A;
+        margin-bottom: 8px;
+        transition: color 0.3s ease;
+    }
+
+    body.dark .timeline-modern-title {
+        color: #22D3EE;
+    }
+
+    .timeline-modern-description {
+        font-size: 15px;
+        color: #333;
+        line-height: 1.5;
+    }
+
+    body.dark .timeline-modern-description {
+        color: #D0D0D0;
+    }
+
+    /* Title Animation */
+    .section-title {
+        position: relative;
+        display: inline-block;
+        margin-bottom: 40px;
+        overflow: hidden;
+    }
+
+    .section-title span {
+        display: inline-block;
+        transform: translateY(100%);
+        animation: slideUp 0.5s ease forwards;
+    }
+
+    .section-title span:nth-child(2) { animation-delay: 0.1s; }
+    .section-title span:nth-child(3) { animation-delay: 0.2s; }
+    .section-title span:nth-child(4) { animation-delay: 0.3s; }
+    .section-title span:nth-child(5) { animation-delay: 0.4s; }
+
+    @keyframes slideUp {
+        to {
+            transform: translateY(0);
+        }
+    }
+
+    .section-title::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+        width: 50px;
+        height: 3px;
+        background: #1E3A8A;
+        border-radius: 2px;
+        transition: width 0.3s ease;
+    }
+
+    body.dark .section-title::after {
+        background: #22D3EE;
+    }
+
+    .section:hover .section-title::after {
+        width: 80px;
+    }
+
+    </style>
+</head>
+<body>
+    <!-- Sidebar Toggle Button -->
+    <button class="sidebar-toggle"><i class="fas fa-bars"></i></button>
+
+    <!-- Navigation Sidebar -->
+    <nav class="sidebar">
+        <div class="logo">
+            <div class="ns-logo">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#hero">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#skills">Short Bio</a></li>
+            <li><a href="#experience">Projects</a></li>
+            <li><a href="#experience">Publications</a></li>
+            <li><a href="#experience">Blog</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+        <button class="theme-toggle">
+            <span class="theme-icon light">☀️</span>
+            <span class="theme-icon dark">🌙</span>
+        </button>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Hero Section -->
+        <section id="hero" class="section hero">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-6">
+                        <h1>Nitin Shukla</h1>
+                        <h3>HPC Application Engineer</h3>
+                        <h6>via Magnanelli-2, CINECA Italy</h6>
+                        <div class="social-icons mt-4">
+                            <a href="https://github.com/nzeal"><i class="fab fa-github"></i></a>
+                            <a href="https://www.linkedin.com/in/nitin-shukla-0670b21a/"><i class="fab fa-linkedin"></i></a>
+                            <a href="https://x.com/thenitinshukla"><i class="fab fa-twitter"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 text-center">
+                        <img src="nitin.jpg" class="img-fluid rounded-circle shadow" style="max-width: 300px;" alt="Profile">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="section">
+            <div class="container">
+                <h2 class="section-title">
+                    About Me
+                </h2>
+                <div class="about-content">
+                    <p>
+                    I have a background in computational plasma physics, 
+                    where I specialize in running large-scale simulations on some of the most powerful high-performance computing (HPC) systems across Europe. 
+                    My research merges theoretical concepts with advanced computing techniques to address critical 
+                    questions in plasma physics, particularly focusing on the generation of magnetic fields at small scales. 
+                    This includes studying key phenomena like the Weibel/Current Filamentation Instability and the Biermann Battery,
+                    which are vital for understanding both lab-based plasma experiments and astrophysical processes.
+                    </p>
+                    <p>
+                        As an HPC Application Engineer, my work centers on:
+                    </p>
+                    <ul>
+                        <li>Developing parallel algorithms for scientific computing</li>
+                        <li>Optimizing algorithms for GPU efficiency</li>
+                        <li>Creating educational resources to empower researchers in parallel computing and GPU utilization</li>
+                    </ul>
+                    The goal is to make computing more efficient and help researchers get better results faster.
+                    <p>
+                    I lead the Scalable Parallel Astrophysical Codes for Exascale (SPACE) Center of Excellence (CoE) at CINECA, 
+                    which focuses on re-engineering key astrophysical codes to tackle new computational challenges 
+                    through innovative programming paradigms and software solutions.
+                    </p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Updated Short Bio Section -->
+        <section id="bio" class="section bg-light">
+            <div class="container">
+                <h2 class="section-title">
+                    Short Bio
+                </h2>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h3 class="mb-4">Education</h3>
+                        <div class="timeline-modern">
+                            <div class="timeline-modern-item">
+                                <div class="timeline-modern-period">2013 - 2019</div>
+                                <div class="timeline-modern-title">Ph.D. in Plasma Physics</div>
+                                <div class="timeline-modern-description">
+                                    Investigated small-scale magnetic field generation, Weibel Instability, and HPC simulation frameworks.
+                                </div>
+                            </div>
+                            <div class="timeline-modern-item">
+                                <div class="timeline-modern-period">2008 - 2010</div>
+                                <div class="timeline-modern-title">M.Sc. in Physics Engineering</div>
+                                <div class="timeline-modern-description">
+                                    Focused on plasma physics, computational physics, and nanotechnology.
+                                </div>
+                            </div>
+                            <div class="timeline-modern-item">
+                                <div class="timeline-modern-period">2005 - 2007</div>
+                                <div class="timeline-modern-title">B.Sc. in Physics</div>
+                                <div class="timeline-modern-description">
+                                    Studied fundamental physics and mathematical methods.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h3 class="mb-4">Professional Experience</h3>
+                        <div class="timeline-modern">
+                            <div class="timeline-modern-item">
+                                <div class="timeline-modern-period">2023 - Present</div>
+                                <div class="timeline-modern-title">HPC Application Engineer</div>
+                                <div class="timeline-modern-description">
+                                    Leading HPC initiatives at CINECA, specializing in GPU acceleration and exascale-ready astrophysical codes.
+                                </div>
+                            </div>
+                            <div class="timeline-modern-item">
+                                <div class="timeline-modern-period">2020 - 2023</div>
+                                <div class="timeline-modern-title">Junior HPC Engineer</div>
+                                <div class="timeline-modern-description">
+                                    Optimized plasma simulation codes and developed HPC training materials.
+                                </div>
+                            </div>
+
+                            <div class="timeline-modern-item">
+                                <div class="timeline-modern-period">2019 - 2020</div>
+                                <div class="timeline-modern-title">Researcher Fellow</div>
+                                <div class="timeline-modern-description">
+                                    Group of Lasers and Plasmas,  Instituto Superior Técnico, Lisbon, Portugal
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Updated HTML sections -->
+<section id="projects" class="section">
+    <div class="container">
+        <h2 class="section-title">Projects</h2>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="modern-card">
+                    <div class="modern-card-header">
+                        <h4 class="modern-card-title">SPACE CoE</h4>
+                        <p class="modern-card-subtitle">2023 - Present</p>
+                    </div>
+                    <div class="modern-card-body">
+                        <p>Leading the development of scalable astrophysical codes optimized for exascale computing systems, pushing the boundaries of computational astrophysics.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="modern-card">
+                    <div class="modern-card-header">
+                        <h4 class="modern-card-title">GPU Optimization of DESTINE </h4>
+                        <p class="modern-card-subtitle">2022 - 2023</p>
+                    </div>
+                    <div class="modern-card-body">
+                        <p> Compiling support of the code RAPS20 by using Spack, Optimisation and performance analysis of the code RAPS20,
+                            GPU support to mini application ECWAM</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="modern-card">
+                    <div class="modern-card-header">
+                        <h4 class="modern-card-title">CHEESE-1&2 </h4>
+                        <p class="modern-card-subtitle">2021 - present</p>
+                    </div>
+                    <div class="modern-card-body">
+                        <p> Mentoring activity on performance and portability analysis of XSHELLS and Tandem codes
+                            Adding CUDA support to the code XSHELLS
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="modern-card">
+                    <div class="modern-card-header">
+                        <h4 class="modern-card-title">EUROFusion </h4>
+                        <p class="modern-card-subtitle">2020 - 2022</p>
+                    </div>
+                    <div class="modern-card-body">
+                        <p> High level user support to enhance streamline workflow efficiency and performance analysis of EUTERPE, GENE, STARWALL</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<section id="publications" class="section bg-light">
+    <div class="container">
+        <h2 class="section-title">Publications</h2>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="modern-card">
+                    <div class="modern-card-header">
+                        <h4 class="modern-card-title">Conditions for the onset of the current filamentation instability in the laboratory</h4>
+                        <p class="modern-card-subtitle">Journal of Plasma Physics 84 3 2018</p>
+                    </div>
+                    <div class="modern-card-body">
+                        <p>Comprehensive study of neutral electron-positron beams to explore current filamentation instability (CFI) and its effects on magnetic fields and particle acceleration
+                        <a href="https://www.cambridge.org/core/journals/journal-of-plasma-physics/article/abs/conditions-for-the-onset-of-the-current-filamentation-instability-in-the-laboratory/20DAE7FBE7723154ADFBCB5B6794DBE3" class="modern-card-link">Read More <i class="fas fa-arrow-right"></i></a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="modern-card">
+                    <div class="modern-card-header">
+                        <h4 class="modern-card-title">Generation of neutral and high-density electron–positron pair plasmas in the laboratory</h4>
+                        <p class="modern-card-subtitle">Nature communications 6, 6747 (2015)</p>
+                    </div>
+                    <div class="modern-card-body">
+                        <p>Paper reports creating a neutral electron–positron plasma, enabling the study of high-energy astrophysical phenomena.</p>
+                        <a href="https://www.nature.com/articles/ncomms7747?origin=ppub#results"
+                        class="modern-card-link">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="blog" class="section">
+    <div class="container">
+        <h2 class="section-title">Blog</h2>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="modern-card">
+                    <div class="modern-card-header">
+                        <h4 class="modern-card-title">GPU Programming Guide</h4>
+                        <p class="modern-card-subtitle">January 2025</p>
+                    </div>
+                    <div class="modern-card-body">
+                        <p>A comprehensive guide to leveraging GPU technology for scientific computing applications.</p>
+                        <a href="#" class="modern-card-link">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="modern-card">
+                    <div class="modern-card-header">
+                        <h4 class="modern-card-title">Exascale Computing Future</h4>
+                        <p class="modern-card-subtitle">December 2024</p>
+                    </div>
+                    <div class="modern-card-body">
+                        <p>Insights into the challenges and opportunities of next-generation exascale computing systems.</p>
+                        <a href="#" class="modern-card-link">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+        <!-- Contact Section -->
+        <section id="contact" class="section bg-light">
+            <div class="container">
+                <h2>Contact Me</h2>
+                <form class="contact-form">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" placeholder="Name">
+                        </div>
+                        <div class="col-md-6">
+                            <input type="email" class="form-control" placeholder="Email">
+                        </div>
+                        <div class="col-12">
+                            <textarea class="form-control" rows="5" placeholder="Message"></textarea>
+                        </div>
+                        <div class="col-12 text-center">
+                            <button class="btn btn-primary">Send Message</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <p>© 2025 Nitin Shukla. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Sidebar Toggle
+        const sidebar = document.querySelector('.sidebar');
+        const sidebarToggle = document.querySelector('.sidebar-toggle');
+        const mainContent = document.querySelector('.main-content');
+
+        sidebarToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+        });
+
+        // Smooth Scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                sidebar.classList.remove('active');
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Dark Mode Toggle
+        const themeToggle = document.querySelector('.theme-toggle');
+        const body = document.body;
+        
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark');
+        });
+
+        // Section Fade-in Animation
+        const sections = document.querySelectorAll('.section');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.2 });
+
+        sections.forEach(section => observer.observe(section));
+    </script>
+</body>
+</html>
