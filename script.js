@@ -1,41 +1,140 @@
-document.addEventListener('DOMContentLoaded', () => {
-    // Sidebar Toggle
-    const sidebar = document.querySelector('.sidebar');
-    const sidebarToggle = document.querySelector('.sidebar-toggle');
-    const mainContent = document.querySelector('.main-content');
+document.addEventListener("DOMContentLoaded", () => {
+  // Mobile navigation handling
+  const mobileToggle = document.querySelector(".mobile-toggle");
+  const mobileNavPanel = document.querySelector(".mobile-nav-panel");
+  const closeBtn = document.querySelector(".close-btn");
 
-    sidebarToggle.addEventListener('click', () => {
-        sidebar.classList.toggle('active');
-    });
+  mobileToggle.addEventListener("click", () => {
+      mobileNavPanel.classList.add("active");
+  });
 
-    // Smooth Scroll
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            sidebar.classList.remove('active');
-            document.querySelector(this.getAttribute('href')).scrollIntoView({
-                behavior: 'smooth'
-            });
-        });
-    });
+  closeBtn.addEventListener("click", () => {
+      mobileNavPanel.classList.remove("active");
+  });
 
-    // Dark Mode Toggle
-    const themeToggle = document.querySelector('.theme-toggle');
-    const body = document.body;
+  document.addEventListener("click", (e) => {
+      if (!mobileNavPanel.contains(e.target) && !mobileToggle.contains(e.target)) {
+          mobileNavPanel.classList.remove("active");
+      }
+  });
 
-    themeToggle.addEventListener('click', () => {
-        body.classList.toggle('dark');
-    });
+  // Smooth scrolling for navigation
+  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+      anchor.addEventListener("click", function(e) {
+          e.preventDefault();
+          const targetId = this.getAttribute("href");
+          if (targetId !== "#") {
+              const targetElement = document.querySelector(targetId);
+              if (targetElement) {
+                  targetElement.scrollIntoView({
+                      behavior: "smooth",
+                  });
+              }
+          }
+          if (mobileNavPanel.classList.contains("active")) {
+              mobileNavPanel.classList.remove("active");
+          }
+      });
+  });
 
-    // Section Fade-in Animation
-    const sections = document.querySelectorAll('.section');
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-            }
-        });
-    }, { threshold: 0.2 });
-
-    sections.forEach(section => observer.observe(section));
+  // Load research metrics on page load
+  loadResearchMetrics();
 });
+
+function loadResearchMetrics() {
+  const cachedData = JSON.parse(localStorage.getItem("scholarData"));
+  const lastFetchTime = localStorage.getItem("lastFetchTime");
+  const currentTime = new Date().getTime();
+
+  // Use cached data if less than an hour old
+  if (cachedData && lastFetchTime && currentTime - lastFetchTime < 3600000) {
+      updateResearchMetrics(cachedData);
+  } else {
+      // Fallback data since no real API is available
+      const fallbackData = {
+          citations: 796,
+          hIndex: 15,
+          i10Index: 17,
+          citationYears: [2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025],
+          citationsPerYear: [7, 19, 16, 20, 23, 28, 22, 13, 40, 49, 51, 60, 61, 65, 51, 84, 77, 100, 7]
+      };
+      localStorage.setItem("scholarData", JSON.stringify(fallbackData));
+      localStorage.setItem("lastFetchTime", currentTime);
+      updateResearchMetrics(fallbackData);
+  }
+}
+
+function updateResearchMetrics(data) {
+  const metricsContainer = document.getElementById("metrics-container");
+  metricsContainer.innerHTML = `
+      <div class="col-md-4 text-center">
+          <div class="metric-card">
+              <div class="metric-value">${data.citations}</div>
+              <div class="metric-label">Total Citations</div>
+          </div>
+      </div>
+      <div class="col-md-4 text-center">
+          <div class="metric-card">
+              <div class="metric-value">${data.hIndex}</div>
+              <div class="metric-label">h-index</div>
+          </div>
+      </div>
+      <div class="col-md-4 text-center">
+          <div class="metric-card">
+              <div class="metric-value">${data.i10Index}</div>
+              <div class="metric-label">i10-index</div>
+          </div>
+      </div>
+  `;
+
+  updateCitationChart(data);
+}
+
+function updateCitationChart(data) {
+  const ctx = document.getElementById("publicationsChart").getContext("2d");
+
+  // Destroy existing chart if it exists
+  if (window.citationChart instanceof Chart) {
+      window.citationChart.destroy();
+  }
+
+  window.citationChart = new Chart(ctx, {
+      type: "bar",
+      data: {
+          labels: data.citationYears,
+          datasets: [{
+              label: "Citations per Year",
+              data: data.citationsPerYear,
+              backgroundColor: "#0071e3",
+              borderColor: "#005bb5",
+              borderWidth: 1
+          }]
+      },
+      options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+              y: {
+                  beginAtZero: true,
+                  grid: {
+                      color: "rgba(0, 0, 0, 0.05)"
+                  }
+              },
+              x: {
+                  grid: {
+                      display: false
+                  }
+              }
+          },
+          plugins: {
+              legend: {
+                  display: false
+              },
+              tooltip: {
+                  backgroundColor: "rgba(0, 0, 0, 0.7)",
+                  padding: 10
+              }
+          }
+      }
+  });
+}
