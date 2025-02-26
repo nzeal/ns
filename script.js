@@ -138,3 +138,27 @@ function updateCitationChart(data) {
       }
   });
 }
+
+
+document.querySelector('a[href^="mailto"]').addEventListener('click', function(e) {
+        e.preventDefault(); // Prevent default behavior temporarily
+        const email = 'n.shukla@cineca.it';
+        
+        // Try to open the mailto link
+        window.location.href = `mailto:${email}`;
+        
+        // Set a timeout to check if the email client opened (optional fallback)
+        setTimeout(() => {
+            if (!document.hidden && !window.location.href.startsWith('mailto:')) {
+                // If the email client didn't open (e.g., no default client), offer a fallback
+                if (confirm(`Could not open your email client. Would you like to copy the email address (${email}) or open a web form?`)) {
+                    // Copy email to clipboard
+                    navigator.clipboard.writeText(email).then(() => {
+                        alert('Email address copied to clipboard: ' + email);
+                    }).catch(err => {
+                        alert('Failed to copy email. Please manually copy: ' + email);
+                    });
+                }
+            }
+        }, 1000); // Check after 1 second
+    });
