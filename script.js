@@ -171,18 +171,12 @@ function openEmailEditor(email) {
     // Set a timeout to check if the email client opened (1 second)
     setTimeout(() => {
         if (!document.hidden && !window.location.href.startsWith('mailto:')) {
-            // If the email client didn’t open, offer a fallback
-            if (confirm(`Could not open your email app. Would you like to open a web email service or copy the email address (${email})?`)) {
-                // Option 1: Open a web email service (e.g., Gmail)
-                window.location.href = `https://mail.google.com/mail/?view=cm&to=${encodeURIComponent(email)}`;
-            } else {
-                // Option 2: Copy email to clipboard
-                navigator.clipboard.writeText(email).then(() => {
-                    alert('Email address copied to clipboard: ' + email);
-                }).catch(err => {
-                    alert('Failed to copy email. Please manually use: ' + email);
-                });
-            }
+            // If the email client didn’t open, copy the email to clipboard
+            navigator.clipboard.writeText(email).then(() => {
+                alert('Could not open your email app. Email address copied to clipboard: ' + email);
+            }).catch(err => {
+                alert('Failed to copy email. Please manually use: ' + email);
+            });
         }
     }, 1000); // Check after 1 second
 }
