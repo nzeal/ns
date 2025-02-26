@@ -139,7 +139,7 @@ function updateCitationChart(data) {
   });
 }
 
-
+// This is for the contact
 document.querySelector('a[href^="mailto"]').addEventListener('click', function(e) {
         e.preventDefault(); // Prevent default behavior temporarily
         const email = 'n.shukla@cineca.it';
