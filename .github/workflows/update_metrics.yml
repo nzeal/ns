@@ -1,31 +1,45 @@
 name: Update Metrics
 
 on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
   schedule:
-    - cron: '0 0 * * 0'  # Runs daily at midnight UTC
-  workflow_dispatch: #allows to run manually
+    - cron: '0 0 * * 0'  # Runs weekly on Sundays at midnight UTC
+  workflow_dispatch:      # Allows manual triggering
 
 jobs:
-  update:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+    - name: Checkout repository
+      uses: actions/checkout@v2
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.9'
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'  # Adjust to your specific version, e.g., '3.9'
 
-      - name: Install dependencies
-        run: pip install requests beautifulsoup4
+    - name: Create and activate virtual environment
+      run: |
+        python -m venv myenv
+        echo "VIRTUAL_ENV=$GITHUB_WORKSPACE/myenv" >> $GITHUB_ENV
+        echo "$GITHUB_WORKSPACE/myenv/bin" >> $GITHUB_PATH
 
-      - name: Run script to update metrics
-        run: python update_metrics.py
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
 
-      - name: Commit and push changes
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: "Update Google Scholar metrics"
-          branch: ${{ github.head_ref || github.ref_name }}
+    - name: Build site
+      run: |
+        myenv/bin/jekyll build
+
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./_site
