@@ -32,7 +32,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: '3.9'  # Adjust as needed
+        python-version: '3.9'
 
     - name: Create and activate virtual environment
       run: |
