@@ -1,4 +1,4 @@
-name: Update Metrics
+name: Update Metrics and Deploy Site
 
 on:
   push:
@@ -19,10 +19,20 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '2.7'  # Stable for Jekyll
+        bundler-cache: true
+
+    - name: Install Ruby dependencies
+      run: |
+        bundle install
+
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: '3.x'  # Adjust to your specific version, e.g., '3.9'
+        python-version: '3.9'  # Adjust as needed
 
     - name: Create and activate virtual environment
       run: |
@@ -30,13 +40,17 @@ jobs:
         echo "VIRTUAL_ENV=$GITHUB_WORKSPACE/myenv" >> $GITHUB_ENV
         echo "$GITHUB_WORKSPACE/myenv/bin" >> $GITHUB_PATH
 
-    - name: Install dependencies
+    - name: Install Python dependencies
       run: |
         pip install -r requirements.txt
 
+    - name: Update metrics
+      run: |
+        myenv/bin/python update_metrics.py  # Assumes this script exists
+
     - name: Build site
       run: |
-        myenv/bin/jekyll build
+        bundle exec jekyll build
 
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
