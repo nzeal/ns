@@ -1,210 +1,182 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // Mobile navigation handling
-    const mobileToggle = document.querySelector(".mobile-toggle");
-    const mobileNavPanel = document.querySelector(".mobile-nav-panel");
-    const closeBtn = document.querySelector(".close-btn");
+  // Mobile navigation handling
+  const mobileToggle = document.querySelector(".mobile-toggle");
+  const mobileNavPanel = document.querySelector(".mobile-nav-panel");
+  const closeBtn = document.querySelector(".close-btn");
 
-    if (mobileToggle) {
-        mobileToggle.addEventListener("click", () => {
-            mobileNavPanel.classList.add("active");
-        });
-    }
+  mobileToggle.addEventListener("click", () => {
+      mobileNavPanel.classList.add("active");
+  });
 
-    if (closeBtn) {
-        closeBtn.addEventListener("click", () => {
-            mobileNavPanel.classList.remove("active");
-        });
-    }
+  closeBtn.addEventListener("click", () => {
+      mobileNavPanel.classList.remove("active");
+  });
 
-    document.addEventListener("click", (e) => {
-        if (mobileNavPanel && !mobileNavPanel.contains(e.target) && mobileToggle && !mobileToggle.contains(e.target)) {
-            mobileNavPanel.classList.remove("active");
-        }
-    });
+  document.addEventListener("click", (e) => {
+      if (!mobileNavPanel.contains(e.target) && !mobileToggle.contains(e.target)) {
+          mobileNavPanel.classList.remove("active");
+      }
+  });
 
-    // Chart initialization
-    let publicationsChart = null;
+  // Smooth scrolling for navigation
+  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+      anchor.addEventListener("click", function(e) {
+          e.preventDefault();
+          const targetId = this.getAttribute("href");
+          if (targetId !== "#") {
+              const targetElement = document.querySelector(targetId);
+              if (targetElement) {
+                  targetElement.scrollIntoView({
+                      behavior: "smooth",
+                  });
+              }
+          }
+          if (mobileNavPanel.classList.contains("active")) {
+              mobileNavPanel.classList.remove("active");
+          }
+      });
+  });
 
-    // Fetch and display metrics - using proper error handling
-    fetch('metrics.json')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            // Update metrics display
-            if (document.getElementById('total-citations')) {
-                document.getElementById('total-citations').textContent = data.citations;
-            }
-            if (document.getElementById('num-publications')) {
-                document.getElementById('num-publications').textContent = data.publications;
-            }
-            if (document.getElementById('h-index')) {
-                document.getElementById('h-index').textContent = data.h_index;
-            }
-
-            // Destroy existing chart if it exists
-            if (publicationsChart) {
-                publicationsChart.destroy();
-            }
-
-            // Create citations chart if data exists
-            const chartElement = document.getElementById('publicationsChart');
-            if (chartElement && data.citations_per_year && Object.keys(data.citations_per_year).length > 0) {
-                const ctx = chartElement.getContext('2d');
-                const citationYears = Object.keys(data.citations_per_year).sort();
-                const citationCounts = citationYears.map(year => data.citations_per_year[year]);
-
-                publicationsChart = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: citationYears,
-                        datasets: [{
-                            label: 'Citations per Year',
-                            data: citationCounts,
-                            backgroundColor: 'rgba(54, 162, 235, 0.7)',
-                            borderColor: 'rgba(54, 162, 235, 1)',
-                            borderWidth: 1,
-                            borderRadius: 4
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            title: {
-                                display: true,
-                                text: 'Citation History',
-                                font: { size: 18, weight: 'bold' },
-                                padding: 20
-                            },
-                            legend: { display: false }
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                title: { 
-                                    display: true, 
-                                    text: 'Number of Citations',
-                                    font: { weight: 'bold' }
-                                },
-                                grid: { color: 'rgba(0,0,0,0.05)' }
-                            },
-                            x: {
-                                title: {
-                                    display: true,
-                                    text: 'Year',
-                                    font: { weight: 'bold' }
-                                },
-                                grid: { display: false }
-                            }
-                        }
-                    }
-                });
-            } else {
-                console.error('Chart element not found or no citation data available');
-                if (chartElement && chartElement.parentElement) {
-                    chartElement.parentElement.innerHTML = 
-                        '<p class="text-danger text-center">Failed to load citation data</p>';
-                }
-            }
-        })
-        .catch(error => {
-            console.error('Error fetching metrics data:', error);
-            
-            // Provide fallback data if fetch fails
-            const fallbackData = {
-                "citations": "796",
-                "publications": "384",
-                "h_index": "15",
-                "citations_per_year": {
-                    "2007": 7, "2008": 19, "2009": 16, "2010": 20,
-                    "2011": 23, "2012": 28, "2013": 22, "2014": 13,
-                    "2015": 40, "2016": 49, "2017": 51, "2018": 60,
-                    "2019": 61, "2020": 65, "2021": 51, "2022": 84,
-                    "2023": 77, "2024": 100, "2025": 7
-                }
-            };
-            
-            // Update metrics with fallback data
-            if (document.getElementById('total-citations')) {
-                document.getElementById('total-citations').textContent = fallbackData.citations;
-            }
-            if (document.getElementById('num-publications')) {
-                document.getElementById('num-publications').textContent = fallbackData.publications;
-            }
-            if (document.getElementById('h-index')) {
-                document.getElementById('h-index').textContent = fallbackData.h_index;
-            }
-            
-            // Create chart with fallback data
-            const chartElement = document.getElementById('publicationsChart');
-            if (chartElement) {
-                const ctx = chartElement.getContext('2d');
-                const citationYears = Object.keys(fallbackData.citations_per_year).sort();
-                const citationCounts = citationYears.map(year => fallbackData.citations_per_year[year]);
-                
-                publicationsChart = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: citationYears,
-                        datasets: [{
-                            label: 'Citations per Year',
-                            data: citationCounts,
-                            backgroundColor: 'rgba(54, 162, 235, 0.7)',
-                            borderColor: 'rgba(54, 162, 235, 1)',
-                            borderWidth: 1,
-                            borderRadius: 4
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            title: {
-                                display: true,
-                                text: 'Citation History',
-                                font: { size: 18, weight: 'bold' },
-                                padding: 20
-                            },
-                            legend: { display: false }
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                title: { 
-                                    display: true, 
-                                    text: 'Number of Citations',
-                                    font: { weight: 'bold' }
-                                },
-                                grid: { color: 'rgba(0,0,0,0.05)' }
-                            },
-                            x: {
-                                title: {
-                                    display: true,
-                                    text: 'Year',
-                                    font: { weight: 'bold' }
-                                },
-                                grid: { display: false }
-                            }
-                        }
-                    }
-                });
-            }
-        });
+  // Load research metrics on page load
+  loadResearchMetrics();
 });
 
+function loadResearchMetrics() {
+    const cachedData = JSON.parse(localStorage.getItem("scholarData"));
+    const lastFetchTime = localStorage.getItem("lastFetchTime");
+    const currentTime = new Date().getTime();
+
+    // Use cached data if less than an hour old
+    if (cachedData && lastFetchTime && currentTime - lastFetchTime < 3600000) {
+            updateResearchMetrics(cachedData);
+    } else {
+            // Fallback data since no real API is available
+            const fallbackData = {
+                    citations: 796,
+                    publications: 40,
+                    hIndex: 15,
+                    citationYears: [2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025],
+                    citationsPerYear: [7, 19, 16, 20, 23, 28, 22, 13, 40, 49, 51, 60, 61, 65, 51, 84, 77, 100, 7]
+            };
+            localStorage.setItem("scholarData", JSON.stringify(fallbackData));
+            localStorage.setItem("lastFetchTime", currentTime);
+            updateResearchMetrics(fallbackData);
+    }
+}
+
+function updateResearchMetrics(data) {
+    const metricsContainer = document.getElementById("metrics-container");
+    metricsContainer.innerHTML = `
+            <div class="col-md-4 text-center">
+                    <div class="metric-card">
+                            <div class="metric-value">${data.citations}</div>
+                            <div class="metric-label">Total Citations</div>
+                    </div>
+            </div>
+            <div class="col-md-4 text-center">
+                    <div class="metric-card">
+                            <div class="metric-value">40</div>
+                            <div class="metric-label">Number of Publications</div>
+                    </div>
+            </div>
+                        <div class="col-md-4 text-center">
+                    <div class="metric-card">
+                            <div class="metric-value">${data.hIndex}</div>
+                            <div class="metric-label">h-index</div>
+                    </div>
+            </div>
+    `;
+
+    updateCitationChart(data);
+}
+
+function updateCitationChart(data) {
+  const ctx = document.getElementById("publicationsChart").getContext("2d");
+
+  // Destroy existing chart if it exists
+  if (window.citationChart instanceof Chart) {
+      window.citationChart.destroy();
+  }
+
+  window.citationChart = new Chart(ctx, {
+      type: "bar",
+      data: {
+          labels: data.citationYears,
+          datasets: [{
+              label: "Citations per Year",
+              data: data.citationsPerYear,
+              backgroundColor: "#0071e3",
+              borderColor: "#005bb5",
+              borderWidth: 1
+          }]
+      },
+      options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+              y: {
+                  beginAtZero: true,
+                  grid: {
+                      color: "rgba(0, 0, 0, 0.05)"
+                  }
+              },
+              x: {
+                  grid: {
+                      display: false
+                  }
+              }
+          },
+          plugins: {
+              legend: {
+                  display: false
+              },
+              tooltip: {
+                  backgroundColor: "rgba(0, 0, 0, 0.7)",
+                  padding: 10
+              }
+          }
+      }
+  });
+}
+
+// This is for the contact
+document.querySelector('a[href^="mailto"]').addEventListener('click', function(e) {
+        e.preventDefault(); // Prevent default behavior temporarily
+        const email = 'n.shukla@cineca.it';
+        
+        // Try to open the mailto link
+        window.location.href = `mailto:${email}`;
+        
+        // Set a timeout to check if the email client opened (optional fallback)
+        setTimeout(() => {
+            if (!document.hidden && !window.location.href.startsWith('mailto:')) {
+                // If the email client didn't open (e.g., no default client), offer a fallback
+                if (confirm(`Could not open your email client. Would you like to copy the email address (${email}) or open a web form?`)) {
+                    // Copy email to clipboard
+                    navigator.clipboard.writeText(email).then(() => {
+                        alert('Email address copied to clipboard: ' + email);
+                    }).catch(err => {
+                        alert('Failed to copy email. Please manually copy: ' + email);
+                    });
+                }
+            }
+        }, 1000); // Check after 1 second
+    });
+
+
 function openEmailEditor(email) {
+    // Try to open the mailto link
     window.location.href = `mailto:${email}`;
+    
+    // Set a timeout to check if the email client opened (1 second)
     setTimeout(() => {
         if (!document.hidden && !window.location.href.startsWith('mailto:')) {
+            // If the email client didn’t open, copy the email to clipboard
             navigator.clipboard.writeText(email).then(() => {
-                alert('Email copied: ' + email);
+                alert('Could not open your email app. Email address copied to clipboard: ' + email);
             }).catch(err => {
-                console.error('Could not copy email: ', err);
+                alert('Failed to copy email. Please manually use: ' + email);
             });
         }
-    }, 1000);
+    }, 1000); // Check after 1 second
 }
