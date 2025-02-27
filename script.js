@@ -182,6 +182,16 @@ function openEmailEditor(email) {
 }
 
 
+  fetch('metrics.json')
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('total-citations').textContent = data.citations;
+            document.getElementById('num-publications').textContent = data.publications;
+            document.getElementById('h-index').textContent = data.h_index;
+        })
+        .catch(error => console.error('Error fetching metrics:', error));
+
+
 
 /* document.addEventListener("DOMContentLoaded", () => {
   // Mobile navigation handling
