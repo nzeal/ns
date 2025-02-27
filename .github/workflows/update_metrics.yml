@@ -3,10 +3,10 @@ name: Update Metrics and Deploy Site
 on:
   push:
     branches:
-      - main
+      - testmain
   pull_request:
     branches:
-      - main
+      - testmain
   schedule:
     - cron: '0 0 * * 0'  # Runs weekly on Sundays at midnight UTC
   workflow_dispatch:      # Allows manual triggering
